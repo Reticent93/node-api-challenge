@@ -21,7 +21,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-	const action = req.body;
+	const project = req.body;
 	projectDB
 		.insert(project)
 		.then((projects) => {
@@ -73,6 +73,26 @@ router.delete('/:projectId', (req, res) => {
 			console.log(error);
 			res.status(500).json({
 				message: 'Error removing the project'
+			});
+		});
+});
+
+router.get('/:id/actionsId', (req, res) => {
+	projectDB
+		.getProjectActions(req.params.id, req.params.actionsId)
+		.then((actions) => {
+			if (actions) {
+				res.json(actions);
+			} else {
+				res.status(404).json({
+					message: 'Action not found'
+				});
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json({
+				message: 'Could not find project'
 			});
 		});
 });
